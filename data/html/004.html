@@ -1,0 +1,105 @@
+<p>Handlebars is a HTML templating language designed to make rendering pages with Javascript-based backends as easy as possible.</p>
+<p>As test-driven developers, not only do we need to write unit tests for our Javascript, but also the actual HTML that gets seved to the client. this can be done programmatically using a framework like Jest.js to make things as easy and fast as possible.</p>
+<ol class="post-ordered-list">
+    <li>
+        First, <a href="/posts/003">ensure that you have Jest</a> and Handlebars installed in your project
+    </li>
+    <li>
+        Next, create a <code>__tests__</code> directory in the same folder as your Handlebars templates
+    </li>
+    <li>
+        As an example, we're using a file called <code>example.hbs</code> with this content:
+<pre>
+&lt;h1&gt;Test Handlebars Page&lt;/h1&gt;
+&lt;div class="test"&gt;
+    &lt;p&gt;This is our test element that we'll test to ensure it gets rendered&lt;/p&gt;
+&lt;/div&gt;</pre>
+    </li>
+    <li>
+        Inside your <code>__tests__</code> directory, add a file called <code>example.tests.js</code>. Inside this file we will define our test cases and other methods/helpers that we'll need in order to run our unit tests
+    </li>
+    <li>
+        We are going to test to see if the element with our class <code>.test</code> exists on the page. To do this we will need to take some steps to be able to import and convert .hbs files to strings for processing in our tests
+    </li>
+    <li>
+        In your <code>package.json</code> file, add the following block underneath <code>"dependencies"</code>:
+<pre>
+"jest": {
+    "transform": {
+        "\\.hbs$": "<rootDir>/tooling/preprocessor.js",
+        "^.+\\.js$": "babel-jest"
+    }
+}</pre>
+    </li>
+    <li>
+        Then, in your root directory, create a folder called <code>tooling</code>, with a file called <code>preprocessor.js</code> inside of it
+    </li>
+    <li>
+        In your <code>preprocessor.js</code> file, add the following code:
+        <pre>
+module.exports = {
+    process(source) {
+        return `
+            const Handlebars = require('handlebars');
+            module.exports = Handlebars.compile(\`${source}\`);
+        `;
+    }
+};</pre>
+    </li>
+    <li>
+        Then, in your example.test.js <code>example.test.js</code> file, import your <code>example.hbs</code> file and create a function that renders the HTML:
+<pre>
+const exampleTemplate = require('../example.hbs');
+const render = context => {
+    document.body.innerHTML = exampleTemplate();
+};</pre>
+    </li>
+    <li>
+        Next, we will define our tests for this page, as a page could have multiple tests that apply to it, we wrap them in a <code>describe</code> block. We provide a block-level description as a string and then create our test using the <code>it</code> function, calling the <code>render</code> function to generate the page to be tested:
+<pre>
+describe('Example page', () => {
+
+    render(exampleTemplate);
+
+    it('has an element with class "test"', () => {
+        const testElement = document.querySelector('.test');
+        expect(testElement).not.toBeNull();
+    });
+});</pre>
+    This is how our complete <code>example.test.js</code> page looks:
+<pre>
+const exampleTemplate = require('../example.hbs');
+const render = context => {
+    document.body.innerHTML = exampleTemplate();
+};
+
+describe('Example page', () => {
+    
+    render(exampleTemplate);
+
+    it('has an element with class "test"', () => {
+		const testElement = document.querySelector('.test');
+		expect(testElement).not.toBeNull();
+    });
+});</pre>
+    </li>
+    <li>
+        Now, we can run our tests using <code>npm test</code>
+    </li>
+    <li>
+        Here is what you should see in your console:
+<pre>
+> express@0.0.0 test
+> jest
+
+ PASS  views/pages/__tests__/example.test.js
+  Example page
+    ✓ has an element with class "test" (4ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        0.59s, estimated 1s
+Ran all test suites.</pre>
+    </li>
+</ol>

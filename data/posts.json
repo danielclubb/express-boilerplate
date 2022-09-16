@@ -1,0 +1,45 @@
+[
+    {
+        "title": "Express.js for Django developers: Dynamic URL routing",
+        "date": "16/09/2022",
+        "id": "001",
+        "postPath": "/posts/001.js",
+        "tags": [
+            "express",
+            "django"
+        ]
+    },
+    {
+        "title": "Express.js for Django developers: Views and Controllers",
+        "date": "16/09/2022",
+        "id": "002",
+        "postPath": "/posts/002.js",
+        "tags": [
+            "express",
+            "django"
+        ]
+    },
+    {
+        "title": "Unit testing in Express.js: Installing Jest",
+        "date": "16/09/2022",
+        "id": "003",
+        "postPath": "/posts/003.js",
+        "tags": [
+            "express",
+            "jest",
+            "testing"
+        ]
+    },
+    {
+        "title": "Testing Handlebars with Jest.js",
+        "date": "16/09/2022",
+        "id": "004",
+        "postPath": "/posts/004.js",
+        "tags": [
+            "express",
+            "jest",
+            "testing",
+            "handlebars"
+        ]
+    }
+]
